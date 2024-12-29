@@ -34,10 +34,18 @@ const Auth = () => {
         localStorage.setItem('token', response.data.data.token);
         navigate('/');
       } else {
-        setError(response.data.status_message || 'Authentication failed');
+        setError(response.data.status_message);
       }
     } catch (err) {
-      setError(err.response?.data?.status_message || 'An error occurred');
+      if (err.response?.data?.status_message) {
+        setError(err.response.data.status_message);
+      } else if (err.response?.status === 422) {
+        setError('Please check your email and password');
+      } else if (err.response?.status === 429) {
+        setError('Too many attempts. Please try again later');
+      } else {
+        setError('An error occurred. Please try again');
+      }
     }
   };
 
@@ -54,13 +62,28 @@ const Auth = () => {
 
       if (response.data.status) {
         setIsRightPanelActive(false);
-        alert('Registration successful! Please login.');
+        setError('Registration successful! Please login.');
         setFormData({ ...formData, name: '' });
       } else {
         setError(response.data.status_message || 'An error occurred');
       }
     } catch (err) {
-      setError(err.response?.data?.status_message || 'An error occurred');
+      if (err.response?.data?.status_message) {
+        setError(err.response.data.status_message);
+      } else if (err.response?.status === 422) {
+        const validationErrors = err.response.data.errors;
+        if (validationErrors) {
+          // Get the first validation error message
+          const firstError = Object.values(validationErrors)[0][0];
+          setError(firstError);
+        } else {
+          setError('Please check your input fields');
+        }
+      } else if (err.response?.status === 429) {
+        setError('Too many attempts. Please try again later');
+      } else {
+        setError('An error occurred. Please try again');
+      }
     }
   };
 
@@ -101,6 +124,15 @@ const Auth = () => {
               onChange={handleChange}
               required
             />
+            {error && (
+              <div 
+                role="alert" 
+                className={`error-message ${error.includes('successful') ? 'success' : 'error'}`}
+                aria-live="polite"
+              >
+                {error}
+              </div>
+            )}
             <button className="button" type="submit">Sign Up</button>
           </form>
         </div>
@@ -126,7 +158,15 @@ const Auth = () => {
               onChange={handleChange}
               required
             />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && (
+              <div 
+                role="alert" 
+                className={`error-message ${error.includes('successful') ? 'success' : 'error'}`}
+                aria-live="polite"
+              >
+                {error}
+              </div>
+            )}
             <button className="button" type="submit">Sign In</button>
           </form>
         </div>
