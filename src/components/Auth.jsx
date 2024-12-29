@@ -11,6 +11,7 @@ const Auth = () => {
     password: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const isAuthenticated = localStorage.getItem('token');
@@ -52,6 +53,7 @@ const Auth = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
     
     try {
       const response = await axios.post(
@@ -73,7 +75,6 @@ const Auth = () => {
       } else if (err.response?.status === 422) {
         const validationErrors = err.response.data.errors;
         if (validationErrors) {
-          // Get the first validation error message
           const firstError = Object.values(validationErrors)[0][0];
           setError(firstError);
         } else {
@@ -84,11 +85,23 @@ const Auth = () => {
       } else {
         setError('An error occurred. Please try again');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handlePanelSwitch = (isRight) => {
+    setIsRightPanelActive(isRight);
+    setError('');
+    setFormData({
+      name: '',
+      email: '',
+      password: ''
+    });
   };
 
   return (
@@ -133,7 +146,13 @@ const Auth = () => {
                 {error}
               </div>
             )}
-            <button className="button" type="submit">Sign Up</button>
+            <button 
+              className={`button ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} 
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? 'Signing Up...' : 'Sign Up'}
+            </button>
           </form>
         </div>
 
@@ -171,38 +190,36 @@ const Auth = () => {
           </form>
         </div>
         <div className="mobile-nav">
-          {isRightPanelActive ? (
-            <button onClick={() => setIsRightPanelActive(false)}>
-              Already have an account? Sign In
-            </button>
-          ) : (
-            <button onClick={() => setIsRightPanelActive(true)}>
-              Don't have an account? Sign Up
-            </button>
-          )}
+          <button onClick={() => handlePanelSwitch(false)}>
+            Already have an account? Sign In
+          </button>
+
+          <button onClick={() => handlePanelSwitch(true)}>
+            Don't have an account? Sign Up
+          </button>
         </div>
         <div className="overlay-container">
           <div className="overlay">
             <div className="overlay-panel overlay-left">
               <h1 className="title">Welcome Back!</h1>
               <p className="paragraph">
-                To keep connected with us please login with your personal info
+                Access your courses and continue your learning journey with us
               </p>
               <button 
                 className="button ghost" 
-                onClick={() => setIsRightPanelActive(false)}
+                onClick={() => handlePanelSwitch(false)}
               >
                 Sign In
               </button>
             </div>
             <div className="overlay-panel overlay-right">
-              <h1 className="title">Hello, Friend!</h1>
+              <h1 className="title">Join Microdeft</h1>
               <p className="paragraph">
-                Enter your personal details and start journey with us
+                Start your learning journey with our expert-led courses
               </p>
               <button 
                 className="button ghost" 
-                onClick={() => setIsRightPanelActive(true)}
+                onClick={() => handlePanelSwitch(true)}
               >
                 Sign Up
               </button>
