@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/auth.css';
 
@@ -12,6 +12,12 @@ const Auth = () => {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const isAuthenticated = localStorage.getItem('token');
+  
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
