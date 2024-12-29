@@ -18,14 +18,11 @@ const Auth = () => {
     setError('');
     
     try {
-      const endpoint = isLogin ? 'login' : 'register';
-      const data = isLogin ? { email, password } : { name, email, password };
-      
-      const response = await axios.post(`https://react-interview.crd4lc.easypanel.host/api/${endpoint}`, data, {
-        headers: {
-          Accept: 'application/json',
-        },
-      });
+      const response = await axios.post(
+        `https://react-interview.crd4lc.easypanel.host/api/login`,
+        { email: formData.email, password: formData.password },
+        { headers: { Accept: 'application/json' } }
+      );
 
       if (response.data.status) {
         localStorage.setItem('token', response.data.data.token);
@@ -34,9 +31,7 @@ const Auth = () => {
         setError(response.data.status_message || 'Authentication failed');
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
-    } finally {
-      setLoading(false);
+      setError(err.response?.data?.status_message || 'An error occurred');
     }
   };
 
