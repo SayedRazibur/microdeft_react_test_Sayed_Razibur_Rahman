@@ -30,7 +30,7 @@ function App() {
           path="/add-course" 
           element={<ProtectedRoute><AddCourse /></ProtectedRoute>} 
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </Layout>
   );
