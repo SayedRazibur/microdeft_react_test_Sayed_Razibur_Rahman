@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
-import '../styles/auth.css';
+import '../../styles/auth.css';
 
 const API_BASE_URL = 'https://react-interview.crd4lc.easypanel.host/api';
 

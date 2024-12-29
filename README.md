@@ -36,19 +36,24 @@ npm run dev
 ```
 src/
 ├── components/
-│ ├── Auth.jsx
-│ ├── Navbar.jsx
-│ ├── Layout.jsx
-│ ├── Courses.jsx
-│ ├── AddCourse.jsx
-│ ├── NotFound.jsx
-│ ├── Loader.jsx
-│ ├── Footer.jsx
-│ └── ProtectedRoute.jsx
+│   ├── auth/
+│   │   └── Auth.jsx
+│   ├── courses/
+│   │   ├── Courses.jsx
+│   │   └── AddCourse.jsx
+│   ├── layout/
+│   │   ├── Layout.jsx
+│   │   ├── Navbar.jsx
+│   │   └── Footer.jsx
+│   └── common/
+│       ├── Loader.jsx
+│       ├── NotFound.jsx
+│       └── ProtectedRoute.jsx
+├── services/
+│   └── api.js
 ├── styles/
-│ ├── auth.css
-│ ├── courses.css
-│ └── addcourse.css
+│   ├── auth.css
+│   └── courses.css
 └── App.jsx
 ```
 

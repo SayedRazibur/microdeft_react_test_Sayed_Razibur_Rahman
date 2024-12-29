@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { fetchCourses } from '../services/api';
-import Loader from './Loader';
-import '../styles/courses.css';
+import { fetchCourses } from '../../services/api';
+import Loader from '../common/Loader';
+import '../../styles/courses.css';
 
 const PLACEHOLDER_IMAGE = 'https://placehold.co/600x400?text=No+Image';
 
